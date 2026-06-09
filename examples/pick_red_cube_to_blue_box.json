@@ -1,0 +1,12 @@
+{
+  "intent": "pick_place",
+  "target": {
+    "type": "cube",
+    "color": "red"
+  },
+  "destination": {
+    "type": "box",
+    "color": "blue"
+  },
+  "relation": "in"
+}

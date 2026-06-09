@@ -1,0 +1,48 @@
+source /opt/ros/jazzy/setup.bash
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+
+# 启动 Panda demo
+ros2 launch moveit_resources_panda_moveit_config demo.launch.py
+
+另开一个终端测试自己写的 pose goal 脚本
+source /opt/ros/jazzy/setup.bash
+
+# 终端 B，先 joint
+source /opt/ros/jazzy/setup.bash
+python3 ~/my/nlp-demo/src/panda_moveit_client.py \
+  --ros-args \
+  -p mode:=joint \
+  -p group_name:=panda_arm
+
+# 终端 B，再 pose
+python3 ~/my/nlp-demo/src/panda_moveit_client.py \
+  --ros-args \
+  -p mode:=pose \
+  -p group_name:=panda_arm \
+  -p base_link_name:=panda_link0 \
+  -p end_effector_name:=panda_link8 \
+  -p position:="[0.35, 0.0, 0.55]" \
+  -p quat_xyzw:="[1.0, 0.0, 0.0, 0.0]" \
+  -p cartesian:=False
+
+# 跑通了，写arm_executor,ranhou dry-run测试：
+python3 src/arm_executor.py
+# 真实 MoveIt2 动作
+source /opt/ros/jazzy/setup.bash
+python3 src/arm_executor.py --execute
+
+# ros2 control list_controllers无效：
+ros2 service list | grep controller_manager
+ros2 service call /controller_manager/list_controllers controller_manager_msgs/srv/ListControllers "{}"
+
+# RViz的Execute的报错：
+[move_group-4] [INFO] [1780994686.900068791] [move_group.moveit.moveit.ros.trajectory_execution_manager]: Validating trajectory with allowed_start_tolerance 0.01
+[move_group-4] [ERROR] [1780994686.905095896] [move_group.moveit.moveit.ros.trajectory_execution_manager]: Invalid Trajectory: start point deviates from current robot state more than 0.01 at joint 'panda_joint1'.
+[move_group-4] Enable DEBUG for detailed state info.
+MoveIt 规划出来的轨迹起点
+和
+当前 /joint_states 里机械臂真实状态
+不一致，偏差超过 0.01 rad
+
+所以 MoveIt 出于安全检查，拒绝执行。

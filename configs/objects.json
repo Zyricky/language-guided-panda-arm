@@ -1,0 +1,43 @@
+[
+    {
+        "id": "red_cube_1",
+        "type": "cube",
+        "color": "red",
+        "pose": [0.45, 0.20, 0.04]
+    },
+    
+    {
+        "id": "blue_cube_1",
+        "type": "cube",
+        "color": "blue",
+        "pose": [0.45, -0.20, 0.04]
+    },
+
+    {
+        "id": "green_cylinder_1",
+        "type": "cylinder",
+        "color": "green",
+        "pose": [0.55, 0.10, 0.04]
+    },
+
+    {
+        "id": "blue_box_1",
+        "type": "box",
+        "color": "blue",
+        "pose": [0.60, -0.25, 0.04]
+    },
+
+    {
+        "id": "green_box_1",
+        "type": "box",
+        "color": "green",
+        "pose": [0.60, 0.25, 0.04]
+    },
+    
+    {
+        "id": "table_center",
+        "type": "table_center",
+        "color": null,
+        "pose": [0.50, 0.00, 0.04]
+    }
+]
