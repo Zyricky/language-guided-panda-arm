@@ -1,15 +1,11 @@
-# 环境配置
-Ubuntu 24.02 + ROS2 - jazzy
 
-ROS2的安装参考鱼香ROS的教程
+
 
 
 source /opt/ros/jazzy/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 
-# 启动 Panda demo
-ros2 launch moveit_resources_panda_moveit_config demo.launch.py
 
 另开一个终端测试自己写的 pose goal 脚本
 source /opt/ros/jazzy/setup.bash
