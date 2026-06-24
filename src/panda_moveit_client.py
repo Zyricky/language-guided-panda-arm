@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+"""Execute one Panda arm joint or pose goal through pymoveit2."""
 
 import time
-
 from threading import Thread
 
 import rclpy
@@ -21,9 +21,8 @@ PANDA_JOINT_NAMES = [
     "panda_joint7",
 ]
 
-def main():
+def main() -> None:
     rclpy.init()
-
     node = Node("panda_moveit_client")
 
     node.declare_parameter("mode", "joint")
@@ -59,71 +58,58 @@ def main():
     moveit2.max_velocity = 0.4
     moveit2.max_acceleration = 0.4
 
-    executor = MultiThreadedExecutor(2)
+    executor = MultiThreadedExecutor(num_threads=2)
     executor.add_node(node)
     executor_thread = Thread(target=executor.spin, daemon=True)
     executor_thread.start()
 
-    # node.create_rate(1.0).sleep()
-    time.sleep(1.0)
+    try:
+        # Give MoveIt service and action clients a moment to connect.
+        time.sleep(1.0)
+        mode = node.get_parameter("mode").get_parameter_value().string_value
 
-    mode = node.get_parameter("mode").get_parameter_value().string_value
+        if mode == "joint":
+            joint_positions = list(
+                node.get_parameter("joint_positions").get_parameter_value().double_array_value
+            )
+            if len(joint_positions) != len(PANDA_JOINT_NAMES):
+                raise ValueError(
+                    f"joint_positions requires {len(PANDA_JOINT_NAMES)} values, "
+                    f"got {len(joint_positions)}."
+                )
+            node.get_logger().info(
+                f"Planning with group='{group_name}', joint_positions={joint_positions}"
+            )
+            moveit2.move_to_configuration(joint_positions)
+        elif mode == "pose":
+            position = list(
+                node.get_parameter("position").get_parameter_value().double_array_value
+            )
+            quat_xyzw = list(
+                node.get_parameter("quat_xyzw").get_parameter_value().double_array_value
+            )
+            if len(position) != 3 or len(quat_xyzw) != 4:
+                raise ValueError("position requires 3 values and quat_xyzw requires 4 values.")
+            cartesian = node.get_parameter("cartesian").get_parameter_value().bool_value
+            node.get_logger().info(
+                f"Planning with group='{group_name}', ee='{end_effector_name}', "
+                f"position={position}, quat_xyzw={quat_xyzw}, cartesian={cartesian}"
+            )
+            moveit2.move_to_pose(
+                position=position,
+                quat_xyzw=quat_xyzw,
+                cartesian=cartesian,
+            )
+        else:
+            raise ValueError(f"Unknown mode: {mode}. Expected 'joint' or 'pose'.")
 
-    if mode == 'joint':
-        joint_positions = (
-            node.get_parameter("joint_positions").get_parameter_value().double_array_value
-        )
-        node.get_logger().info(
-            f"Planning with group='{group_name}', joint_positions={list(joint_positions)}"
-        )
-        moveit2.move_to_configuration(joint_positions)
-
-    elif mode == "pose":
-        position = node.get_parameter("position").get_parameter_value().double_array_value
-        quat_xyzw = node.get_parameter("quat_xyzw").get_parameter_value().double_array_value
-        cartesian = node.get_parameter("cartesian").get_parameter_value().bool_value
-
-        node.get_logger().info(
-            f"Planning with group='{group_name}', ee='{end_effector_name}', "
-            f"position={list(position)}, quat_xyzw={list(quat_xyzw)}"
-        )
-        
-        moveit2.move_to_pose(
-            position=position,
-            quat_xyzw=quat_xyzw,
-            cartesian=cartesian,
-        )
-
-    else:
-        raise ValueError(f"Unknown mode: {mode}")
-    
-    moveit2.wait_until_executed()
-
-    rclpy.shutdown()
-    executor_thread.join()
+        moveit2.wait_until_executed()
+    finally:
+        executor.shutdown()
+        node.destroy_node()
+        rclpy.shutdown()
+        executor_thread.join()
 
 
 if __name__ == "__main__":
     main()
-
-
-# 给这个脚本添加可执行权限
-# chmod +x ~/my/nlp-demo/src/panda_moveit_client.py
-'''
-测试 joint goal
-python3 ~/my/nlp-demo/src/panda_moveit_client.py \
-  --ros-args \
-  -p mode:=joint \
-  -p group_name:=panda_arm
-
-测试 pose goal
-python3 ~/my/nlp-demo/src/panda_moveit_client.py \
-  --ros-args \
-  -p mode:=pose \
-  -p group_name:=panda_arm \
-  -p end_effector_name:=panda_link8 \
-  -p position:="[0.35, 0.0, 0.55]" \
-  -p quat_xyzw:="[1.0, 0.0, 0.0, 0.0]" \
-  -p cartesian:=False
-
-'''

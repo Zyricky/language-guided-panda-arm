@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://language-guided-panda-arm.local/schemas/task_schema.json",
+  "title": "Language-guided Panda Arm Task DSL",
+  "description": "Intermediate representation produced from a user instruction before object grounding and motion execution.",
+  "type": "object",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "required": [
+        "intent",
+        "target"
+      ],
+      "properties": {
+        "intent": {"const": "pick"},
+        "target": {"$ref": "#/$defs/object_reference"}
+      }
+    },
+    {
+      "additionalProperties": false,
+      "required": [
+        "intent",
+        "target",
+        "destination",
+        "relation"
+      ],
+      "properties": {
+        "intent": {"const": "pick_place"},
+        "target": {"$ref": "#/$defs/object_reference"},
+        "destination": {"$ref": "#/$defs/object_reference"},
+        "relation": {
+          "type": "string",
+          "enum": ["in", "on", "near", "left_of", "right_of", "center"]
+        }
+      }
+    }
+  ],
+  "properties": {
+    "intent": {
+      "type": "string",
+      "enum": [
+        "pick",
+        "pick_place"
+      ],
+      "description": "High-level manipulation action."
+    },
+    "target": {
+      "$ref": "#/$defs/object_reference"
+    },
+    "destination": {
+      "$ref": "#/$defs/object_reference"
+    },
+    "relation": {
+      "type": "string",
+      "enum": [
+        "in",
+        "on",
+        "near",
+        "left_of",
+        "right_of",
+        "center"
+      ],
+      "description": "Final spatial relation between target and destination."
+    }
+  },
+  "$defs": {
+    "object_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "color"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Optional exact object ID from configs/objects.json. Use this when the language names a unique instance."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cube",
+            "cylinder",
+            "box",
+            "table"
+          ]
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "red",
+            "blue",
+            "green",
+            null
+          ]
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "intent": "pick_place",
+      "target": {
+        "type": "cube",
+        "color": "red"
+      },
+      "destination": {
+        "type": "box",
+        "color": "blue"
+      },
+      "relation": "in"
+    }
+  ]
+}

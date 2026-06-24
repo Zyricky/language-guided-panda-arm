@@ -1,0 +1,26 @@
+{
+  "tasks": [
+    {
+      "id": "put_red_in_blue",
+      "intent": "pick_place",
+      "target": {
+        "id": "red_cube_1"
+      },
+      "destination": {
+        "id": "blue_box_1"
+      },
+      "relation": "in"
+    },
+    {
+      "id": "put_blue_in_green",
+      "intent": "pick_place",
+      "target": {
+        "id": "blue_cube_1"
+      },
+      "destination": {
+        "id": "green_box_1"
+      },
+      "relation": "in"
+    }
+  ]
+}

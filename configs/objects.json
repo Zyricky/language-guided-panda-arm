@@ -1,43 +1,95 @@
-[
+{
+  "frame_id": "panda_link0",
+  "units": "meters",
+  "objects": [
     {
-        "id": "red_cube_1",
-        "type": "cube",
-        "color": "red",
-        "pose": [0.45, 0.20, 0.04]
+      "id": "red_cube_1",
+      "type": "cube",
+      "color": "red",
+      "pose": {
+        "position": [0.45, 0.2, 0.02],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": [0.04, 0.04, 0.04],
+      "pickable": true
     },
-    
     {
-        "id": "blue_cube_1",
-        "type": "cube",
-        "color": "blue",
-        "pose": [0.45, -0.20, 0.04]
+      "id": "blue_cube_1",
+      "type": "cube",
+      "color": "blue",
+      "pose": {
+        "position": [0.42, -0.15, 0.02],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": [0.04, 0.04, 0.04],
+      "pickable": true
     },
-
     {
-        "id": "green_cylinder_1",
-        "type": "cylinder",
-        "color": "green",
-        "pose": [0.55, 0.10, 0.04]
+      "id": "green_cylinder_1",
+      "type": "cylinder",
+      "color": "green",
+      "pose": {
+        "position": [0.4, 0.0, 0.03],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": {
+        "radius": 0.025,
+        "height": 0.06
+      },
+      "pickable": true
     },
-
     {
-        "id": "blue_box_1",
-        "type": "box",
-        "color": "blue",
-        "pose": [0.60, -0.25, 0.04]
+      "id": "blue_box_1",
+      "type": "box",
+      "color": "blue",
+      "pose": {
+        "position": [0.66, -0.2, 0.04],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": [0.2, 0.2, 0.08],
+      "scene_geometry": {
+        "kind": "open_container",
+        "wall_thickness": 0.002,
+        "bottom_thickness": 0.002
+      },
+      "pickable": false,
+      "accepts": [
+        "in"
+      ]
     },
-
     {
-        "id": "green_box_1",
-        "type": "box",
-        "color": "green",
-        "pose": [0.60, 0.25, 0.04]
+      "id": "green_box_1",
+      "type": "box",
+      "color": "green",
+      "pose": {
+        "position": [0.58, 0.12, 0.04],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": [0.1, 0.1, 0.08],
+      "scene_geometry": {
+        "kind": "open_container",
+        "wall_thickness": 0.001,
+        "bottom_thickness": 0.001
+      },
+      "pickable": false,
+      "accepts": [
+        "in"
+      ]
     },
-    
     {
-        "id": "table_center",
-        "type": "table_center",
-        "color": null,
-        "pose": [0.50, 0.00, 0.04]
+      "id": "table_center",
+      "type": "table",
+      "color": null,
+      "pose": {
+        "position": [0.4, 0.0, -0.02],
+        "quat_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "size": [1.0, 1.0, 0.04],
+      "scene_geometry": {
+        "anchor": "top_surface"
+      },
+      "pickable": false,
+      "accepts": ["on"]
     }
-]
+  ]
+}

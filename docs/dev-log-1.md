@@ -112,6 +112,7 @@ cat > examples/pick_red_cube_to_blue_box.json <<'EOF'
 }
 EOF
 ```
+
 1. 今天最终验收
 
 今天结束前，你应该能做到两个结果。

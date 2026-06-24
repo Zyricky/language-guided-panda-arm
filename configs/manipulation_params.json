@@ -1,0 +1,14 @@
+{
+  "motion_link": "panda_link8",
+  "attachment_link": "panda_hand",
+  "top_down_quat_xyzw": [1.0, 0.0, 0.0, 0.0],
+  "grasp_center_to_tcp": [0.0, 0.0, 0.1654],
+  "approach_distance": 0.15,
+  "lift_distance": 0.20,
+  "place_clearance": 0.003,
+  "gripper": {
+    "min_opening": 0.0,
+    "max_opening": 0.08,
+    "object_clearance": 0.005
+  }
+}

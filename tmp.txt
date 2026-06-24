@@ -46,3 +46,16 @@ MoveIt 规划出来的轨迹起点
 不一致，偏差超过 0.01 rad
 
 所以 MoveIt 出于安全检查，拒绝执行。
+
+
+真实抓取动作：
+python3 src/arm_executor.py \
+  --task-file configs/demo_pick_place.json \
+  --execute \
+
+
+
+语义链接测试
+python3 -m unittest discover -s test -t . -p "test_nl_parser.py" -v
+python3 -m unittest discover -s test -t . -p "test_synonym_normalizer.py" -v
+python3 -m unittest discover -s test -t . -p "test_instruction_dataset.py" -v
